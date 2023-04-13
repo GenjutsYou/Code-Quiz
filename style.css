@@ -5,6 +5,7 @@ body, html, h1, p, ul, li, input {
   }
   
   body {
+    background-color: black;
     font-family: Arial, sans-serif;
   }
   
@@ -18,12 +19,12 @@ body, html, h1, p, ul, li, input {
   }
   
   .top {
-    position: relative;
+    position: center;
   }
   
   .top button {
-    background-color: #007bff;
-    color: #fff;
+    background-color:crimson;
+    color:white;
     padding: 10px 20px;
     border: none;
     cursor: pointer;
@@ -32,9 +33,9 @@ body, html, h1, p, ul, li, input {
   .inner-container {
     width: 400px;
     padding: 20px;
-    background-color: #f8f9fa;
+    background-color: white;
     border-radius: 5px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 4px black;
   }
   
   .quiz {
@@ -49,12 +50,12 @@ body, html, h1, p, ul, li, input {
   
   .quiz p {
     font-size: 18px;
-    color: #777;
+    color: white;
   }
   
   #start-button {
-    background-color: #28a745;
-    color: #fff;
+    background-color: grey;
+    color: white;
     padding: 15px 30px;
     font-size: 18px;
     border: none;
@@ -69,10 +70,12 @@ body, html, h1, p, ul, li, input {
   }
   
   #answer-choices {
+    cursor: pointer;
     list-style-type: none;
   }
   
   #answer-choices li {
+    cursor: pointer;
     margin-bottom: 10px;
   }
   
@@ -81,28 +84,24 @@ body, html, h1, p, ul, li, input {
   }
   
   #timer {
-    position: absolute;
-    top: 0;
-    right: 0;
-    margin: 0;
+    color: white;
   }
   
   #game-over {
     font-size: 24px;
     margin-bottom: 20px;
     display: none;
-    color: red;
+    color: crimson;
   }
   
   #initials-input {
-    padding: 10px;
-    margin-bottom: 10px;
-    width: 100%;
+    padding: 15px 30px;
+    margin-bottom: 20px;
   }
   
   #save-button {
-    background-color: #007bff;
-    color: #fff;
+    background-color: grey;
+    color: white;
     padding: 15px 30px;
     font-size: 18px;
     border: none;
