@@ -9,29 +9,38 @@
 </head>
 <body>
 
-    <!-- outer -->
-    <div class="outer-container">
+<!-- outer -->
+<div class="outer-container">
 
-        <!-- top -->
-        <div class="top">
-            <button>View Highscore</button>
-            <p>Timer: 00:00</p>
-        </div>
-
-        <!-- inner-->
-        <div class="inner-container">
-
-            <!-- main header -->
-            <header class="quiz">
-                <h1>Welcome!</h1>
-                <p>Press start to start the quiz!</p>
-            </header>
-
-            <!-- quiz -->
-            <main>
-
-            </main>
-        </div>
+    <!-- top -->
+    <div class="top">
+        <button>View Highscore</button>
+        <p id="timer">Time: 60 seconds</p>
     </div>
+
+    <!-- inner-->
+    <div class="inner-container">
+
+        <!-- main header -->
+        <header class="quiz">
+            <h1>Welcome!</h1>
+            <p>Press start to start the quiz!</p>
+        </header>
+
+        <!-- quiz -->
+        <main>
+            <div id="start-button">Start Quiz</div>
+            <div id="question"></div>
+            <ul id="answer-choices"></ul>
+            <div id="game-over">Game Over</div>
+            <form id="save-score-form" action="submit-score.php" method="POST">
+                <input type="text" id="initials-input" placeholder="Enter your initials" name="initials">
+                <input type="submit" id="save-button" value="Save Score">
+            </form>
+        </main>
+    </div>
+</div>
+
+<script src="script.js"></script>
 </body>
 </html>
