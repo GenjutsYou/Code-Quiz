@@ -2,6 +2,7 @@
 var currentQuestionIndex = 0;
 var time = 60;
 var timerInterval;
+var score = 0;
 
 // DOM Elements
 var startButtonEl = document.getElementById("start-button");
@@ -11,6 +12,8 @@ var timerEl = document.getElementById("timer");
 var gameOverEl = document.getElementById("game-over");
 var initialsInputEl = document.getElementById("initials-input");
 var saveButtonEl = document.getElementById("save-button");
+var scoreEl = document.getElementById("score");
+var scoreDisplay = document.getElementById("scoreValue");
 
 // Quiz Questions
 var questions = [
@@ -90,6 +93,16 @@ function showQuestion() {
   }
 }
 
+// Function to update the timer
+function updateTimer() {
+  time--;
+  if (time <= 0) {
+    endQuiz();
+  } else {
+    timerEl.textContent = "Time: " + time + " seconds";
+  }
+}
+
 // Function to check the selected answer
 function checkAnswer(event) {
   if (event.target.matches("li")) {
@@ -97,6 +110,7 @@ function checkAnswer(event) {
     var question = questions[currentQuestionIndex];
     if (selectedAnswer === question.answer) {
       // Correct answer
+      score += 10; // Add 10 points for correct answer
       currentQuestionIndex++;
       if (currentQuestionIndex === questions.length) {
         endQuiz();
@@ -105,11 +119,18 @@ function checkAnswer(event) {
       }
     } else {
       // Incorrect answer
+      score = 0; // Set score to 0 for incorrect answer
       time -= 10; // Penalty of 10 seconds for incorrect answer
       if (time < 0) {
         time = 0; // Make sure time doesn't go negative
       }
       updateTimer();
+      currentQuestionIndex++; // Move to the next question
+      if (currentQuestionIndex === questions.length) {
+        endQuiz();
+      } else {
+        showQuestion();
+      }
     }
   }
 }
@@ -123,18 +144,25 @@ function endQuiz() {
   gameOverEl.style.display = "block";
 }
 
-// Function to update the timer
-function updateTimer() {
-  time--;
-  if (time <= 0) {
-    endQuiz();
-  } else {
-    timerEl.textContent = "Time: " + time + " seconds";
-  }
+// Update the score display in your code
+function updateScoreDisplay() {
+  var scoreDisplay = document.getElementById("scoreDisplay");
+  scoreDisplay.textContent = "Score: " + score;
 }
 
 // Function to save initials and score
 function saveScore() {
   var initials = initialsInputEl.value;
   // Save initials and score logic here
+
+  // Save initials and score to local storage
+  localStorage.setItem("initials", initials);
+  localStorage.setItem("score", score);
+
+  // Create a submit button and append it to the HTML
+  var submitBtn = document.createElement("button");
+  submitBtn.textContent = "Submit";
+  submitBtn.addEventListener("click", submitScore);
+  gameOverEl.appendChild(submitBtn);
 }
+
