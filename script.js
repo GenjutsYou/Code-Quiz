@@ -3,6 +3,7 @@ var currentQuestionIndex = 0;
 var time = 60;
 var timerInterval;
 var score = 0;
+var highscores = [];
 
 // DOM Elements
 var startButtonEl = document.getElementById("start-button");
@@ -13,7 +14,8 @@ var gameOverEl = document.getElementById("game-over");
 var initialsInputEl = document.getElementById("initials-input");
 var saveButtonEl = document.getElementById("save-button");
 var scoreEl = document.getElementById("score");
-var scoreDisplay = document.getElementById("scoreValue");
+var scoreDisplayEl = document.getElementById("scoreValue");
+var highscoreBtnEl = document.getElementById("highscore-btn");
 
 // Quiz Questions
 var questions = [
@@ -69,10 +71,15 @@ var questions = [
     },
 ];  
 
+// Get highscores from local storage
+getHighscores()
+
 // Event Listeners
 startButtonEl.addEventListener("click", startQuiz);
 answerChoicesEl.addEventListener("click", checkAnswer);
-saveButtonEl.addEventListener("click", saveScore);
+saveButtonEl.addEventListener("click", submitScore);
+highscoreBtnEl.addEventListener("click", viewHighscores);
+
 
 // Function to start the quiz
 function startQuiz() {
@@ -111,6 +118,7 @@ function checkAnswer(event) {
     if (selectedAnswer === question.answer) {
       // Correct answer
       score += 10; // Add 10 points for correct answer
+      updateScoreDisplay()
       currentQuestionIndex++;
       if (currentQuestionIndex === questions.length) {
         endQuiz();
@@ -119,7 +127,6 @@ function checkAnswer(event) {
       }
     } else {
       // Incorrect answer
-      score = 0; // Set score to 0 for incorrect answer
       time -= 10; // Penalty of 10 seconds for incorrect answer
       if (time < 0) {
         time = 0; // Make sure time doesn't go negative
@@ -135,34 +142,93 @@ function checkAnswer(event) {
   }
 }
 
-// Function to end the quiz
 function endQuiz() {
   clearInterval(timerInterval);
   timerEl.textContent = "Time's Up!";
-  questionEl.textContent = "";
-  answerChoicesEl.innerHTML = "";
+  questionEl.style.display = "none";
+  answerChoicesEl.style.display = "none";
   gameOverEl.style.display = "block";
+  startButtonEl.style.display = "none";
 }
 
 // Update the score display in your code
 function updateScoreDisplay() {
-  var scoreDisplay = document.getElementById("scoreDisplay");
-  scoreDisplay.textContent = "Score: " + score;
+  scoreDisplay.textContent = score;
 }
 
 // Function to save initials and score
 function saveScore() {
-  var initials = initialsInputEl.value;
-  // Save initials and score logic here
+  var initials = initialsInputEl.value.trim();
+  if (initials === "") {
+    return;
+  }
+  var newScore = {
+    initials: initials,
+    score: score
+  };
+  console.log('newScore', newScore)
+  highscores.push(newScore);
+  saveHighscores();
+  initialsInputEl.value = "";
+  // viewHighscores();
+}
 
-  // Save initials and score to local storage
-  localStorage.setItem("initials", initials);
-  localStorage.setItem("score", score);
+// Function to save highscores to local storage
+function saveHighscores() {
+  localStorage.setItem("highscores", JSON.stringify(highscores));
+}
 
-  // Create a submit button and append it to the HTML
+// Function to retrieve highscores from local storage
+function getHighscores() {
+  var storedHighscores = localStorage.getItem("highscores");
+  if (storedHighscores) {
+    highscores = JSON.parse(storedHighscores);
+  }
+}
+
+// Create a submit button and append it to the HTML
   var submitBtn = document.createElement("button");
   submitBtn.textContent = "Submit";
-  submitBtn.addEventListener("click", submitScore);
-  gameOverEl.appendChild(submitBtn);
+  submitBtn.addEventListener("click", saveScore);
+  initialsInputEl.parentNode.insertBefore(submitBtn, initialsInputEl.nextSibling);
+
+// Function to view high scores
+function viewHighscores() {
+  startButtonEl.style.display = "none";
+  questionEl.style.display = "none";
+  answerChoicesEl.style.display = "none";
+  gameOverEl.style.display = "none";
+  initialsInputEl.style.display = "none";
+  saveButtonEl.style.display = "none";
+  scoreEl.style.display = "block"; // Show the high scores
+  
+  // Retrieve highscores from local storage
+  var storedHighscores = localStorage.getItem("highscores");
+  if (storedHighscores) {
+    scoreDisplay.innerHTML = ""; // Clear the existing high scores
+    for (var i = 0; i < highscores.length; i++) {
+      var scoreEntry = document.createElement("li");
+      scoreEntry.textContent = highscores[i].initials + ": " + highscores[i].score;
+      scoreDisplay.appendChild(scoreEntry);
+    }
+  }
+  
+  highscoreBtnEl.disabled = true;
 }
+
+function submitScore() {
+  var initials = initialsInputEl.value.trim();
+  if (initials === "") {
+    return;
+  }
+  var newScore = {
+    initials: initials,
+    score: score
+  };
+  highscores.push(newScore);
+  saveHighscores();
+  initialsInputEl.value = "";
+  viewHighscores();
+}
+
 
